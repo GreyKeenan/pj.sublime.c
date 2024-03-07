@@ -36,7 +36,7 @@ unsigned char Game_main() {
 				printf(">\n");
 				break;
 			default:
-				printf("| ERR | Unrecognized keymap return value. |\n");
+				printf("| ERR | Unrecognized keymap check return value. |\n");
 				exit(1);
 		}
 	}

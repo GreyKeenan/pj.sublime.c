@@ -34,11 +34,11 @@ void mainloop(unsigned char control) {
 				//unreachable
 				break;
 			case MAIN_MENU:
-				printf("starting MAIN_MENU\n"); //temp
+				printf("starting MAIN_MENU. Press any key.\n"); //temp
 				control = Menu_main();
 				break;
 			case MAIN_GAME:
-				printf("starting MAIN_GAME\n"); //temp
+				printf("starting MAIN_GAME. Press wasq.\n"); //temp
 				control = Game_main();
 				break;
 			default:
