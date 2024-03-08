@@ -3,8 +3,8 @@
 
 #include "mapT.h"
 
-typedef struct MapI_Node {
+typedef struct Map_Node {
 	MapT_content foundation;
-} MapI_Node;
+} Map_Node;
 
 #endif
