@@ -32,6 +32,6 @@ void TilePile_destroy(TilePile *self) {
 	free(self);
 }
 
-Tile *TilePile_getId(TilePile *self, TilePileT_count id) {
+Tile *TilePile_getId(const TilePile *self, TilePileT_count id) {
 	return self->tiles[id];
 }

@@ -32,7 +32,6 @@ void mainloop(unsigned char control) {
 		switch (control) {
 			case MAIN_END:
 				//unreachable
-				break;
 			case MAIN_MENU:
 				printf("starting MAIN_MENU. Press any key.\n"); //temp
 				control = Menu_main();

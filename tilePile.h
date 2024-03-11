@@ -9,6 +9,6 @@
 TilePile *TilePile_init(TilePileT_count tileCount);
 void TilePile_destroy(TilePile *self);
 
-Tile *TilePile_getId(TilePile *self, TilePileT_count id);
+Tile *TilePile_getId(const TilePile *self, TilePileT_count id);
 
 #endif
