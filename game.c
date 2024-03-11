@@ -8,8 +8,13 @@
 #include "rendering.h"
 #include "input.h"
 
+#include "level.h"
+#include "level_impl.h"
+
 unsigned char Game_main() {
 	
+	Level level = Level_init_path("assets/levels/debug.txt");
+
 	Input_resetKeyboard();
 
 	Input_Keymap *keymap = Input_Keymap_initialize_string("wasq");
@@ -42,6 +47,8 @@ unsigned char Game_main() {
 	}
 
 	Input_Keymap_destroy(keymap);
+
+	Level_destroy(&level);
 
 	return nextControl;
 }
