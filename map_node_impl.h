@@ -1,10 +1,10 @@
-#ifndef MAPI_NODE_H
-#define MAPI_NODE_H
+#ifndef MAP_NODE_IMPL_H
+#define MAP_NODE_IMPL_H
 
-#include "mapT.h"
+#include "map_node_forw.h"
 
 typedef struct Map_Node {
-	MapT_content foundation;
+	Map_Node *foundation;
 } Map_Node;
 
 #endif

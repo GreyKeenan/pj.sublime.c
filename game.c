@@ -9,11 +9,11 @@
 #include "input.h"
 
 #include "level.h"
+#include "level_impl.h"
 
 unsigned char Game_main() {
 	
-	Level *lvl = Level_init_path("assets/levels/debug.txt");
-
+	Level level = Level_init_path("assets/levels/debug.txt");
 
 	Input_resetKeyboard();
 
@@ -48,7 +48,7 @@ unsigned char Game_main() {
 
 	Input_Keymap_destroy(keymap);
 
-	Level_destroy(lvl);
+	Level_destroy(&level);
 
 	return nextControl;
 }

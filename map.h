@@ -1,18 +1,25 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "mapT.h"
+#include <stdbool.h>
+
+#include "map_forw.h"
 #include "map_node_forw.h"
 
-#include "tilePile_forw.h"
-
-typedef struct Map Map;
-
-Map *Map_init(MapT_dimension width, MapT_dimension height, TilePile *tilePile);
+Map Map_init(unsigned char width, unsigned char height);
 void Map_destroy(Map *self);
 
-Map_Node *Map_getIndexTop(const Map *self, MapT_dimension width, MapT_dimension height);
+bool Map_isInBounds(const Map *self, unsigned char x, unsigned char y);
+bool Map_isInBoundsLinear(const Map *self, unsigned short int i);
 
-void Map_move(Map *self, MapT_dimension fromX, MapT_dimension fromY, MapT_dimension toX, MapT_dimension toY);
+void *Map_getIndex(const Map *self, unsigned char x, unsigned char y);
+void Map_setIndex(Map *self, unsigned char x, unsigned char y, Map_Node *new_node);
+void Map_stackIndex(Map *self, unsigned char x, unsigned char y, Map_Node *new_node);
+
+void *Map_getIndexLinear(const Map *self, unsigned short int i);
+void *Map_setIndexLinear(const Map *self, unsigned short int i, Map_Node *new_node);
+void Map_stackIndexLinear(Map *self, unsigned short int i, Map_Node *new_node);
+
+void Map_moveIndex(Map *self, unsigned char fromX, unsigned char fromY, unsigned char toX, unsigned char toY);
 
 #endif

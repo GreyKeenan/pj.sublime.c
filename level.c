@@ -1,58 +1,58 @@
 
 #include "level.h"
 
+#define LEVEL_TILE_EMPTY '.'
+#define LEVEL_TILE_WATER 'w'
+#define LEVEL_TILE_WALL 'H'
+#define LEVEL_TILE_LIME '$'
+#define LEVEL_TILE_SLIME '@'
+#define LEVEL_TILE_ROCK '#'
+#define LEVEL_TILE_UNSTABLEGROUND '0'
+//lava (l), ice (i), cracked ice (), peppers (~), fire (!)
+
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdbool.h>
 
-#include "level_parseIcons.h" //should probably just have here directly
+#include "level_impl.h"
 
 #include "map.h"
-#include "tilePile.h"
+#include "pile.h"
 
-typedef struct Level {
-	TilePile *tilePile;
-	Map *map;
-	//so do winCheck and inpCheck go here too?
-} Level;
+#include "ceramicist.h"
+#include "ceramicist_impl.h"
 
+Level _Level_measure(FILE *fp);
+void _Level_populate(Level *self, FILE *fp);
 
-Level *_Level_pathMeasure(FILE *fp);
-void _Level_pathPopulate(Level *self, FILE *fp);
-
-Level *Level_init_path(const char *path) {
-	
+Level Level_init_path(const char *path) {
 	FILE *fp = fopen(path, "r");
 	if (!fp) {
-		printf("| ERR | Level: Opening level file failed. |\n");
+		printf("| ERR | Level: failed to open file '%s'. |\n", path);
 		exit(1);
 	}
 
-	Level *self = _Level_pathMeasure(fp);
+	Level self = _Level_measure(fp);
 	rewind(fp);
-	_Level_pathPopulate(self, fp);
 
-	fclose(fp);
-
+	_Level_populate(&self, fp);
+	
 	return self;
 }
 void Level_destroy(Level *self) {
-	TilePile_destroy(self->tilePile);
-	Map_destroy(self->map);
-	free(self);
+	Map_destroy(&self->map);
+	Pile_destroy(&self->pile);
 }
 
-Level *_Level_pathMeasure(FILE *fp) {
-	unsigned char uniqueTileCount = 0;
+Level _Level_measure(FILE *fp) {
 
 	unsigned char firstWidth = 0;
-	unsigned char width = 0;
+	unsigned char incrWidth = 0;
 	unsigned char height = 0;
 
 	unsigned char playerCount = 0;
 	unsigned char limeCount = 0;
 
-	//temporary unique check
+	unsigned char uniqueTileCount = 0;
 	bool empty = false;
 	bool water = false;
 	bool wall = false;
@@ -64,20 +64,20 @@ Level *_Level_pathMeasure(FILE *fp) {
 			case ' ': break;
 			case '\t': break;
 			case '\n':
-				if (!width) {
+				if (!incrWidth) {
 					break;
 				}
-				if (width != firstWidth) {
+				if (incrWidth != firstWidth) {
 					if (!firstWidth) {
-						firstWidth = width;
-						width = 0;
+						firstWidth = incrWidth;
+						incrWidth = 0;
 						height++;
 						break;
 					}
-					printf("| ERR | Level: parsing level file, uneven row widths. |\n");
+					printf("| ERR | Level: parsing level file, uneven row incrWidths. |\n");
 					exit(1);
 				}
-				width = 0;
+				incrWidth = 0;
 				height++;
 				break;
 			case LEVEL_TILE_EMPTY:
@@ -85,21 +85,21 @@ Level *_Level_pathMeasure(FILE *fp) {
 					empty = true;
 					goto uniqueTile;
 				}
-				width++;
+				incrWidth++;
 				break;
 			case LEVEL_TILE_WATER:
 				if (!water) {
 					water = true;
 					goto uniqueTile;
 				}
-				width++;
+				incrWidth++;
 				break;
 			case LEVEL_TILE_WALL:
 				if (!wall) {
 					wall = true;
 					goto uniqueTile;
 				}
-				width++;
+				incrWidth++;
 				break;
 
 			case LEVEL_TILE_LIME:
@@ -118,36 +118,44 @@ Level *_Level_pathMeasure(FILE *fp) {
 				break;
 
 			default:
-				printf("| ERR | Level: unrecognized tile icon. |\n");
+				printf("| ERR | Level: measuring. unrecognized tile icon. |\n");
 				exit(1);
 			uniqueTile:
 				uniqueTileCount++;
-				width++;
+				incrWidth++;
 				break;
 		};
 	}
 	if (!playerCount) {
-		printf("| ERR | Level: parsing level file, no player found. |\n");
+		printf("| ERR | Level: measuring level file, no player found. |\n");
 		exit(1);
 	}
 	if (!limeCount) {
-		printf("| ERR | Level: parsing level file, no lime found. |\n");
+		printf("| ERR | Level: measuring level file, no lime found. |\n");
 		exit(1);
 	}
 
-	Level *lvl = malloc(sizeof(Level));
+	printf("Players: %d\n\
+Limes: %d\n\
+Width: %d\n\
+Height: %d\n\
+Unique Tiles: %d\n"
+		, playerCount, limeCount, firstWidth, height, uniqueTileCount);
 
-	lvl->tilePile = TilePile_init(uniqueTileCount);
-	lvl->map = Map_init(firstWidth, height, lvl->tilePile);
-	
-	return lvl; 
+	Level lvl = {
+		.map = Map_init(firstWidth, height)
+		, .pile = Pile_init(uniqueTileCount)
+	};
+
+	return lvl;
 }
 
-void _Level_pathPopulate(Level *self, FILE *fp) {
-	
-	bool empty = false;
-	bool water = false;
-	bool wall = false;
+void _Level_populate(Level *self, FILE *fp) {
+
+	Ceramicist cer = Ceramicist_init(self);
+
+	unsigned short i = 0;
+	void *recent = NULL;
 
 	int c = 0;
 	while ((c = fgetc(fp)) != EOF) {
@@ -158,24 +166,33 @@ void _Level_pathPopulate(Level *self, FILE *fp) {
 			case '\n': break;
 
 			case LEVEL_TILE_EMPTY:
-				break;
+				recent = Ceramicist_getEmpty(&cer);
+				goto mapify;
 			case LEVEL_TILE_WATER:
-				break;
+				recent = Ceramicist_getWater(&cer);
+				goto mapify;
 			case LEVEL_TILE_WALL:
-				break;
+				recent = Ceramicist_getWall(&cer);
+				goto mapify;
 
 			case LEVEL_TILE_LIME:
-				break;
+				goto mapify;
 			case LEVEL_TILE_SLIME:
-				break;
+				goto mapify;
 			case LEVEL_TILE_ROCK:
-				break;
+				goto mapify;
 			//case LEVEL_TILE_UNSTABLEGROUND:
-			//	break;
+			//	goto mapify;
 
 			default:
-				printf("| ERR | Level: populating level, unrecognized tile icon. |\n");
+				printf("| ERR | Level: populating. unrecognized tile icon. |\n");
 				exit(1);
+			mapify:
+				Map_stackIndexLinear(&self->map, i, recent); //I mean, I could just set the foundations of tiles to NULL and not have to stack here.
+				i++;
+				break;
 		};
 	}
+
+	//ceramicist doesnt allocate mem
 }
