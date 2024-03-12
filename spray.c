@@ -31,6 +31,6 @@ void *Spray_getEmpty(Spray *self) {
 	}
 	printf("\nCreating new 'empty' mist.\n");
 
-
+	
 
 }
