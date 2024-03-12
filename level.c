@@ -8,7 +8,7 @@
 #define LEVEL_TILE_SLIME '@'
 #define LEVEL_TILE_ROCK '#'
 #define LEVEL_TILE_UNSTABLEGROUND '0'
-//lava (l), ice (i), cracked ice (), peppers (~), fire (!)
+//lava (l), ice (i), ice ball (), peppers (~), fire (!)
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -121,7 +121,7 @@ Level _Level_measure(FILE *fp) {
 				break;
 
 			default:
-				printf("| ERR | Level: measuring. unrecognized tile icon. |\n");
+				printf("| ERR | Level: measuring. unrecognized tile icon '%c'. |\n", c);
 				exit(1);
 			uniqueTile:
 				uniqueTileCount++;
@@ -187,6 +187,8 @@ void _Level_populate(Level *self, FILE *fp) {
 				Map_delinear(&self->map, i, &x, &y);
 				Tile_Lime_setPos(recent, x, y);
 
+				//need to store reference somewhere
+
 				goto mapify;
 			case LEVEL_TILE_SLIME:
 				recent = Ceramicist_newSlime(&cer);
@@ -194,13 +196,15 @@ void _Level_populate(Level *self, FILE *fp) {
 				Map_delinear(&self->map, i, &x, &y);
 				Tile_Slime_setPos(recent, x, y);
 
+				//need to store reference somewhere
+
 				goto mapify;
 			case LEVEL_TILE_ROCK:
 				recent = Ceramicist_newRock(&cer);
 				goto mapify;
 			case LEVEL_TILE_UNSTABLEGROUND:
 				recent = Ceramicist_newUnstableGround(&cer);
-				//wait, does unstable ground need a pos?
+				//wait, will unstable ground need a pos?
 				goto mapify;
 
 			default:
@@ -215,3 +219,6 @@ void _Level_populate(Level *self, FILE *fp) {
 
 	//ceramicist doesnt allocate mem
 }
+
+
+//so, to add a new tile, you need to modify both switch statements here, add appropr bhv ids, and modify ceramicist? plus probably a tileTypeID in the future? / oh and Tile ID for reading lvl
