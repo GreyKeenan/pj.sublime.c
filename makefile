@@ -9,3 +9,6 @@ run: _build/app.exe
 
 clean: _build/
 	rm _build/*
+
+log: .git
+	git log --graph --oneline --all

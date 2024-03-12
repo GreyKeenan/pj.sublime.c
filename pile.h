@@ -7,6 +7,6 @@
 Pile Pile_init(unsigned char maxLength);
 void Pile_destroy(Pile *self);
 
-unsigned char Pile_add(Pile *self, Tile *newTile);
+unsigned char Pile_add(Pile *self, void *newTile);
 
 #endif

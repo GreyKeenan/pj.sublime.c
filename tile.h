@@ -5,7 +5,9 @@
 
 #include "tile_bhv.h"
 
-Tile *Tile_initialize(unsigned char pushBhv, unsigned char enterBhv, unsigned char exitBhv);
+Tile *Tile_newInitialize(unsigned char pushBhv, unsigned char enterBhv, unsigned char exitBhv);
+void Tile_initialize(Tile *self, unsigned char pushBhv, unsigned char enterBhv, unsigned char exitBhv);
+
 void Tile_destroy(Tile *self);
 
 #endif

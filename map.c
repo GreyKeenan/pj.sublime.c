@@ -94,3 +94,8 @@ void Map_moveIndex(Map *self, unsigned char fromX, unsigned char fromY, unsigned
 	Map_stackIndex(self, toX, toY, from);
 }
 
+
+void Map_delinear(Map *self, unsigned short int i, unsigned char *x, unsigned char *y) {
+	*x = i % self->width;
+	*y = i / self->width;
+}

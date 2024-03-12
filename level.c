@@ -21,6 +21,9 @@
 #include "ceramicist.h"
 #include "ceramicist_impl.h"
 
+#include "tile_lime.h"
+#include "tile_slime.h"
+
 Level _Level_measure(FILE *fp);
 void _Level_populate(Level *self, FILE *fp);
 
@@ -154,6 +157,9 @@ void _Level_populate(Level *self, FILE *fp) {
 
 	Ceramicist cer = Ceramicist_init(self);
 
+	unsigned char x = 0;
+	unsigned char y = 0;
+
 	unsigned short i = 0;
 	void *recent = NULL;
 
@@ -176,16 +182,29 @@ void _Level_populate(Level *self, FILE *fp) {
 				goto mapify;
 
 			case LEVEL_TILE_LIME:
+				recent = Ceramicist_newLime(&cer);
+
+				Map_delinear(&self->map, i, &x, &y);
+				Tile_Lime_setPos(recent, x, y);
+
 				goto mapify;
 			case LEVEL_TILE_SLIME:
+				recent = Ceramicist_newSlime(&cer);
+
+				Map_delinear(&self->map, i, &x, &y);
+				Tile_Slime_setPos(recent, x, y);
+
 				goto mapify;
 			case LEVEL_TILE_ROCK:
+				recent = Ceramicist_newRock(&cer);
 				goto mapify;
-			//case LEVEL_TILE_UNSTABLEGROUND:
-			//	goto mapify;
+			case LEVEL_TILE_UNSTABLEGROUND:
+				recent = Ceramicist_newUnstableGround(&cer);
+				//wait, does unstable ground need a pos?
+				goto mapify;
 
 			default:
-				printf("| ERR | Level: populating. unrecognized tile icon. |\n");
+				printf("| ERR | Level: populating. unrecognized tile icon '%c'. |\n", c);
 				exit(1);
 			mapify:
 				Map_stackIndexLinear(&self->map, i, recent); //I mean, I could just set the foundations of tiles to NULL and not have to stack here.

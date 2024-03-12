@@ -37,7 +37,7 @@ void Pile_destroy(Pile *self) {
 	self->tiles = NULL;
 }
 
-unsigned char Pile_add(Pile *self, Tile *newTile) {
+unsigned char Pile_add(Pile *self, void *newTile) {
 	if (self->length > self->maxLength) {
 		printf("| ERR | Pile: array overflow. |\n");
 		exit(1);
@@ -45,7 +45,6 @@ unsigned char Pile_add(Pile *self, Tile *newTile) {
 	self->tiles[self->length] = newTile;
 	self->length++;
 
-	printf("pile length: %d\n", self->length);
-
+	//printf("pile length: %d\n", self->length);
 	return self->length - 1;
 }

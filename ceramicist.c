@@ -10,6 +10,9 @@
 #include "tile.h"
 #include "pile.h"
 
+#include "tile_lime.h"
+#include "tile_slime.h"
+
 Ceramicist Ceramicist_init(Level *level) {
 	Ceramicist self = {
 		.level = level
@@ -23,7 +26,7 @@ void *Ceramicist_getEmpty(Ceramicist *self) {
 	}
 
 	printf("\nCreating new Empty tile.\n");
-	Tile *new = Tile_initialize(
+	Tile *new = Tile_newInitialize(
 		TILE_BHV_NOTHING
 		, TILE_BHV_NOTHING
 		, TILE_BHV_NOTHING
@@ -41,7 +44,7 @@ void *Ceramicist_getWater(Ceramicist *self) {
 	}
 
 	printf("\nCreating new Water tile.\n");
-	Tile *new = Tile_initialize(
+	Tile *new = Tile_newInitialize(
 		TILE_BHV_NOTHING
 		, TILE_BHV_ENTER_DIE_WATER
 		, TILE_BHV_NOTHING
@@ -59,7 +62,7 @@ void *Ceramicist_getWall(Ceramicist *self) {
 	}
 
 	printf("\nCreating new Wall tile.\n");
-	Tile *new = Tile_initialize(
+	Tile *new = Tile_newInitialize(
 		TILE_BHV_PUSH_COLLIDE
 		, TILE_BHV_NOTHING
 		, TILE_BHV_NOTHING
@@ -71,9 +74,37 @@ void *Ceramicist_getWall(Ceramicist *self) {
 	return new;
 }
 
-void *Ceramicist_newSlime(Ceramicist *self) {
+void *Ceramicist_newLime(const Ceramicist *self) {
+	Tile_Lime *new = Tile_Lime_newInitialize_positionless();
 
-	
+	Pile_add(&self->level->pile, new);
+	return new;
+}
+void *Ceramicist_newSlime(const Ceramicist *self) {
+	Tile_Slime *new = Tile_Slime_newInitialize_positionless();
 
-	return NULL;
+	Pile_add(&self->level->pile, new);
+	return new;
+}
+void *Ceramicist_newRock(const Ceramicist *self) {
+
+	Tile *new = Tile_newInitialize(
+		TILE_BHV_PUSH_PUSHABLE
+		, TILE_BHV_NOTHING
+		, TILE_BHV_NOTHING
+	);
+
+	Pile_add(&self->level->pile, new);
+	return new;
+}
+void *Ceramicist_newUnstableGround(const Ceramicist *self) {
+
+	Tile *new = Tile_newInitialize(
+		TILE_BHV_NOTHING
+		, TILE_BHV_NOTHING
+		, TILE_BHV_EXIT_UNSTABLEGROUND
+	);
+
+	Pile_add(&self->level->pile, new);
+	return new;
 }
