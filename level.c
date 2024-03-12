@@ -13,10 +13,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "level_impl.h"
+
 #include "map.h"
 #include "pile.h"
 
-#include "level_impl.h"
+#include "ceramicist.h"
+#include "ceramicist_impl.h"
 
 Level _Level_measure(FILE *fp);
 void _Level_populate(Level *self, FILE *fp);
@@ -148,9 +151,11 @@ Unique Tiles: %d\n"
 }
 
 void _Level_populate(Level *self, FILE *fp) {
-	bool empty = false;
-	bool water = false;
-	bool wall = false;
+
+	Ceramicist cer = Ceramicist_init(self);
+
+	unsigned short i = 0;
+	void *recent = NULL;
 
 	int c = 0;
 	while ((c = fgetc(fp)) != EOF) {
@@ -161,24 +166,33 @@ void _Level_populate(Level *self, FILE *fp) {
 			case '\n': break;
 
 			case LEVEL_TILE_EMPTY:
-				break;
+				recent = Ceramicist_getEmpty(&cer);
+				goto mapify;
 			case LEVEL_TILE_WATER:
-				break;
+				recent = Ceramicist_getWater(&cer);
+				goto mapify;
 			case LEVEL_TILE_WALL:
-				break;
+				recent = Ceramicist_getWall(&cer);
+				goto mapify;
 
 			case LEVEL_TILE_LIME:
-				break;
+				goto mapify;
 			case LEVEL_TILE_SLIME:
-				break;
+				goto mapify;
 			case LEVEL_TILE_ROCK:
-				break;
+				goto mapify;
 			//case LEVEL_TILE_UNSTABLEGROUND:
-			//	break;
+			//	goto mapify;
 
 			default:
 				printf("| ERR | Level: populating. unrecognized tile icon. |\n");
 				exit(1);
+			mapify:
+				Map_stackIndexLinear(&self->map, i, recent); //I mean, I could just set the foundations of tiles to NULL and not have to stack here.
+				i++;
+				break;
 		};
 	}
+
+	//ceramicist doesnt allocate mem
 }

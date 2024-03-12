@@ -36,6 +36,9 @@ void Map_destroy(Map *self) {
 bool Map_isInBounds(const Map *self, unsigned char x, unsigned char y) {
 	return x < self->width && y < self->height;
 }
+bool Map_isInBoundsLinear(const Map *self, unsigned short int i) {
+	return i < self->width * self->height;
+}
 
 void *Map_getIndex(const Map *self, unsigned char x, unsigned char y) {
 	if (!Map_isInBounds(self, x, y)) {
@@ -54,6 +57,26 @@ void Map_setIndex(Map *self, unsigned char x, unsigned char y, Map_Node *new_nod
 void Map_stackIndex(Map *self, unsigned char x, unsigned char y, Map_Node *new_node) {
 	new_node->foundation = Map_getIndex(self, x, y);
 	Map_setIndex(self, x, y, new_node);
+}
+
+void *Map_getIndexLinear(const Map *self, unsigned short int i) {
+	if (!Map_isInBoundsLinear(self, i)) {
+		printf("| ERR | Map: Getting linear index out of range. |\n");
+		exit(1);
+	}
+	return self->grid[i];
+}
+void *Map_setIndexLinear(const Map *self, unsigned short int i, Map_Node *new_node) {
+	if (!Map_isInBoundsLinear(self, i)) {
+		printf("| ERR | Map: Setting linear index out of range. |\n");
+		exit(1);
+	}
+	self->grid[i] = new_node;
+}
+void Map_stackIndexLinear(Map *self, unsigned short int i, Map_Node *new_node) {
+	new_node->foundation = Map_getIndexLinear(self, i);
+	Map_setIndexLinear(self, i, new_node);
+
 }
 
 
