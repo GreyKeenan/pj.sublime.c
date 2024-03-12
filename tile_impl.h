@@ -3,10 +3,13 @@
 
 //#include "tile_forw.h"
 #include "map_node_impl.h"
+#include "mist_forw.h"
 
 typedef struct Tile {
 	Map_Node mapNode;
-	//mist
+	
+	Mist *mist;
+
 	unsigned char pushBhv;
 	unsigned char enterBhv;
 	unsigned char exitBhv;

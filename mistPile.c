@@ -7,9 +7,7 @@
 #include "mist_impl.h"
 #include "mist_bhv_funs.h"
 
-typedef struct MistPile {
-	Mist *head;
-} MistPile;
+#include "mistPile_impl.h"
 
 void _MistPile_rDestroy(Mist *mist);
 

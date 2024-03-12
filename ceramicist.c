@@ -7,6 +7,8 @@
 #include "ceramicist_impl.h"
 
 #include "level_impl.h" //depending on future systems, consider using Pile directly instead of Level
+#include "spraybottle.h"
+
 #include "tile.h"
 #include "pile.h"
 
@@ -16,6 +18,7 @@
 Ceramicist Ceramicist_init(Level *level) {
 	Ceramicist self = {
 		.level = level
+		, .spraybottle = Spraybottle_init(&level->mistPile)
 	};
 	return self;
 }

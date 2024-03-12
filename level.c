@@ -17,6 +17,7 @@
 
 #include "map.h"
 #include "pile.h"
+#include "mistPile.h"
 
 #include "ceramicist.h"
 #include "ceramicist_impl.h"
@@ -36,6 +37,8 @@ Level Level_init_path(const char *path) {
 
 	Level self = _Level_measure(fp);
 	rewind(fp);
+
+	self.mistPile = MistPile_init_empty();
 
 	_Level_populate(&self, fp);
 	

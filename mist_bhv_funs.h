@@ -5,6 +5,6 @@
 
 void Mist_bhv_destroy(Mist *self);
 
-//bool Mist_bhv_draw(Mist *self);
+void Mist_bhv_draw(Mist *self);
 
 #endif

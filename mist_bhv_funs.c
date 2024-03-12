@@ -13,5 +13,15 @@ void Mist_bhv_destroy(Mist *self) {
 		default:
 			printf("| ERR | Mist Bhv: unrecognized destroyBhv id '%d'. |\n", self->destroyBhv);
 			exit(1);
-	}
+	};
+}
+
+void Mist_bhv_draw(Mist *self) {
+	switch (self->drawBhv) {
+		case MIST_BHV_DEFAULT:
+			break;
+		default:
+			printf("| ERR | Mist Bhv: unrecognized drawBhv id '%d'. |\n", self->drawBhv);
+			exit(1);
+	};
 }
