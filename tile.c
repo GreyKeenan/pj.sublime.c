@@ -3,16 +3,21 @@
 
 #include <stdlib.h>
 
+#include "mist_forw.h"
+
 #include "tile_impl.h"
 
-Tile *Tile_newInitialize(unsigned char pushBhv, unsigned char enterBhv, unsigned char exitBhv) {
+Tile *Tile_newInitialize(Mist *mist, unsigned char pushBhv, unsigned char enterBhv, unsigned char exitBhv) {
 	Tile *self = malloc(sizeof(Tile));
 
-	Tile_initialize(self, pushBhv, enterBhv, exitBhv);
+	Tile_initialize(self, mist, pushBhv, enterBhv, exitBhv);
 
 	return self;
 }
-void Tile_initialize(Tile *self, unsigned char pushBhv, unsigned char enterBhv, unsigned char exitBhv) {
+void Tile_initialize(Tile *self, Mist *mist, unsigned char pushBhv, unsigned char enterBhv, unsigned char exitBhv) {
+
+	self->mist = mist;
+
 	self->pushBhv = pushBhv;
 	self->enterBhv = enterBhv;
 	self->exitBhv = exitBhv;
@@ -21,5 +26,6 @@ void Tile_initialize(Tile *self, unsigned char pushBhv, unsigned char enterBhv, 
 }
 
 void Tile_destroy(Tile *self) {
+	Mist_destroy(self->mist);
 	free(self);
 }

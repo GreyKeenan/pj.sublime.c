@@ -2,6 +2,7 @@
 #include "mist.h"
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "rendering.h"
 
 #include "mist_impl.h"
@@ -22,6 +23,13 @@ void Mist_initialize_path(Mist *self, const char *path, unsigned char drawBhv, u
 }
 
 void Mist_destroy(Mist *self) {
-	Rendering_destroyTexture(self->texture);
+	switch (sef->destroyBhv) {
+		case MIST_BHV_DEFAULT:
+			Rendering_destroyTexture(self->texture);
+			break;
+		default:
+			printf("| ERR | Mist: unrecognized destroyBhv '%d'. |\n", self->destroyBhv);
+			exit(1);
+	};
 	free(self);
 }

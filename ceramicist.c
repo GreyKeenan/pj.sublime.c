@@ -9,6 +9,7 @@
 #include "level_impl.h" //depending on future systems, consider using Pile directly instead of Level
 #include "tile.h"
 #include "pile.h"
+#include "mist.h"
 
 #include "tile_lime.h"
 #include "tile_slime.h"
