@@ -3,13 +3,13 @@
 
 #include "map_impl.h"
 #include "pile_impl.h"
-#include "mistPile_impl.h"
+#include "spray_forw.h"
 
 typedef struct Level {
 	Map map;
 	Pile pile;
 
-	MistPile mistPile;
+	Spray *spray;
 
 } Level;
 

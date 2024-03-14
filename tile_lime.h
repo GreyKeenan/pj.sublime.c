@@ -3,8 +3,10 @@
 
 #include "tile_lime_forw.h"
 
-Tile_Lime *Tile_Lime_newInitialize_positionless();
-void Tile_Lime_initialize_positionless(Tile_Lime *self);
+#include "mist_forw.h"
+
+Tile_Lime *Tile_Lime_newInitialize_positionless(Mist *mist);
+void Tile_Lime_initialize_positionless(Tile_Lime *self, Mist *mist);
 
 void Tile_Lime_setPos(void *self, unsigned char x, unsigned char y);
 

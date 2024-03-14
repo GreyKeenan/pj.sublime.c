@@ -7,10 +7,9 @@
 #include "ceramicist_impl.h"
 
 #include "level_impl.h" //depending on future systems, consider using Pile directly instead of Level
-#include "spraybottle.h"
-
 #include "tile.h"
 #include "pile.h"
+#include "spray.h"
 
 #include "tile_lime.h"
 #include "tile_slime.h"
@@ -18,7 +17,6 @@
 Ceramicist Ceramicist_init(Level *level) {
 	Ceramicist self = {
 		.level = level
-		, .spraybottle = Spraybottle_init(&level->mistPile)
 	};
 	return self;
 }
@@ -28,12 +26,13 @@ void *Ceramicist_getEmpty(Ceramicist *self) {
 		return self->staticEmpty;
 	}
 
-	printf("\nCreating new Empty tile.\n");
 	Tile *new = Tile_newInitialize(
-		TILE_BHV_NOTHING
+		Spray_getEmpty(self->level->spray)
+		, TILE_BHV_NOTHING
 		, TILE_BHV_NOTHING
 		, TILE_BHV_NOTHING
 	);
+	printf("\nCreating new Empty tile at %p\n", new);
 
 	Pile_add(&self->level->pile, new);
 	
@@ -46,12 +45,13 @@ void *Ceramicist_getWater(Ceramicist *self) {
 		return self->staticWater;
 	}
 
-	printf("\nCreating new Water tile.\n");
 	Tile *new = Tile_newInitialize(
-		TILE_BHV_NOTHING
+		Spray_getWater(self->level->spray)
+		, TILE_BHV_NOTHING
 		, TILE_BHV_ENTER_DIE_WATER
 		, TILE_BHV_NOTHING
 	);
+	printf("\nCreating new Water tile at %p\n", new);
 
 	Pile_add(&self->level->pile, new);
 	
@@ -64,12 +64,13 @@ void *Ceramicist_getWall(Ceramicist *self) {
 		return self->staticWall;
 	}
 
-	printf("\nCreating new Wall tile.\n");
 	Tile *new = Tile_newInitialize(
-		TILE_BHV_PUSH_COLLIDE
+		Spray_getWall(self->level->spray)
+		, TILE_BHV_PUSH_COLLIDE
 		, TILE_BHV_NOTHING
 		, TILE_BHV_NOTHING
 	);
+	printf("\nCreating new Wall tile at %p\n", new);
 
 	Pile_add(&self->level->pile, new);
 
@@ -78,21 +79,21 @@ void *Ceramicist_getWall(Ceramicist *self) {
 }
 
 void *Ceramicist_newLime(const Ceramicist *self) {
-	Tile_Lime *new = Tile_Lime_newInitialize_positionless();
+	Tile_Lime *new = Tile_Lime_newInitialize_positionless(Spray_getLime(self->level->spray));
 
 	Pile_add(&self->level->pile, new);
 	return new;
 }
 void *Ceramicist_newSlime(const Ceramicist *self) {
-	Tile_Slime *new = Tile_Slime_newInitialize_positionless();
-
+	Tile_Slime *new = Tile_Slime_newInitialize_positionless(Spray_getSlime(self->level->spray));
 	Pile_add(&self->level->pile, new);
 	return new;
 }
 void *Ceramicist_newRock(const Ceramicist *self) {
 
 	Tile *new = Tile_newInitialize(
-		TILE_BHV_PUSH_PUSHABLE
+		Spray_getRock(self->level->spray)
+		, TILE_BHV_PUSH_PUSHABLE
 		, TILE_BHV_NOTHING
 		, TILE_BHV_NOTHING
 	);
@@ -103,7 +104,8 @@ void *Ceramicist_newRock(const Ceramicist *self) {
 void *Ceramicist_newUnstableGround(const Ceramicist *self) {
 
 	Tile *new = Tile_newInitialize(
-		TILE_BHV_NOTHING
+		Spray_getUnstableGround(self->level->spray)
+		, TILE_BHV_NOTHING
 		, TILE_BHV_NOTHING
 		, TILE_BHV_EXIT_UNSTABLEGROUND
 	);

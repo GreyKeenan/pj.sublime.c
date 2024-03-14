@@ -4,16 +4,12 @@
 #include "level_forw.h"
 #include "tile_forw.h"
 
-#include "spraybottle_impl.h"
-
 typedef struct Ceramicist {
-	Level *level; //I dont use Map so could just be Pile right?
+	Level *level;
 
 	Tile *staticEmpty;
 	Tile *staticWater;
 	Tile *staticWall;
-
-	Spraybottle spraybottle;
 
 } Ceramicist;
 

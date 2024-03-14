@@ -17,20 +17,21 @@ typedef struct Tile_Lime {
 	
 } Tile_Lime;
 
-Tile_Lime *Tile_Lime_newInitialize_positionless() {
+Tile_Lime *Tile_Lime_newInitialize_positionless(Mist *mist) {
 	Tile_Lime *self = malloc(sizeof(Tile_Lime));
 
-	Tile_Lime_initialize_positionless(self);
+	Tile_Lime_initialize_positionless(self, mist);
 
 	return self;
 }
-void Tile_Lime_initialize_positionless(Tile_Lime *self) {
+void Tile_Lime_initialize_positionless(Tile_Lime *self, Mist *mist) {
 	self->x = 0;
 	self->y = 0;
 
 	self->pressed = false;
 	
 	Tile_initialize((Tile*)self
+		, mist
 		, TILE_BHV_NOTHING
 		, TILE_BHV_ENTER_LIME
 		, TILE_BHV_EXIT_LIME

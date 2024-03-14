@@ -3,18 +3,12 @@
 
 #include "renderingT.h"
 
-#include "mist_forw.h"
-#include "mist_bhv.h"
-
 typedef struct Mist {
-	Mist *next;
 
-	RenderingT_texture *texture; //put in substruct instead?
+	RenderingT_texture *texture;
 
 	unsigned char drawBhv;
 	unsigned char destroyBhv;
-
-	//bool obscuresTile;
 
 } Mist;
 
