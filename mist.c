@@ -42,7 +42,7 @@ void Mist_destroy(Mist *self) {
 #define TEMP_SIZE 25
 void Mist_draw(Mist *self, unsigned char x, unsigned char y) {
 	if (!self) {
-		//printf("\nDrawing nonexistent mist. Aborting.\n");
+		printf("\nDrawing nonexistent mist. Aborting.\n");
 		return;
 	}
 	switch (self->drawBhv) {

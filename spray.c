@@ -12,6 +12,12 @@ typedef struct Spray {
 	Mist *mEmpty;
 	Mist *mWater;
 	Mist *mWall;
+
+	Mist *mLime;
+	Mist *mSlime;
+
+	Mist *mRock;
+	Mist *mUnstableGround;
 } Spray;
 
 Spray *Spray_init() {
@@ -80,15 +86,59 @@ void *Spray_getWall(Spray *self) {
 }
 
 void *Spray_getLime(Spray *self) {
-	return NULL;
+	if (self->mLime) {
+		return self->mLime;
+	}
+	printf("\nCreating new 'lime' mist.\n");
+
+	Mist *new = Mist_newInit_path("assets/textures/lime.bmp"
+		, MIST_BHV_DEFAULT
+		, MIST_BHV_DEFAULT
+	);
+	self->mLime = new;
+	
+	return new;
 }
 void *Spray_getSlime(Spray *self) {
-	return NULL;
+	if (self->mSlime) {
+		return self->mSlime;
+	}
+	printf("\nCreating new 'slime' mist.\n");
+
+	Mist *new = Mist_newInit_path("assets/textures/slime_1.bmp"
+		, MIST_BHV_DEFAULT
+		, MIST_BHV_DEFAULT
+	);
+	self->mSlime = new;
+	
+	return new;
 }
 
 void *Spray_getRock(Spray *self) {
-	return NULL;
+	if (self->mRock) {
+		return self->mRock;
+	}
+	printf("\nCreating new 'rock' mist.\n");
+
+	Mist *new = Mist_newInit_path("assets/textures/rock_1.bmp"
+		, MIST_BHV_DEFAULT
+		, MIST_BHV_DEFAULT
+	);
+	self->mRock = new;
+	
+	return new;
 }
 void *Spray_getUnstableGround(Spray *self) {
-	return NULL;
+	if (self->mUnstableGround) {
+		return self->mUnstableGround;
+	}
+	printf("\nCreating new 'unstableground' mist.\n");
+
+	Mist *new = Mist_newInit_path("assets/textures/unstableground.bmp"
+		, MIST_BHV_DEFAULT
+		, MIST_BHV_DEFAULT
+	);
+	self->mUnstableGround = new;
+	
+	return new;
 }

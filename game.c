@@ -46,7 +46,6 @@ unsigned char Game_main() {
 				printf("| ERR | Unrecognized keymap check return value. |\n");
 				exit(1);
 		};
-
 		DrawMap_go(&level.map);
 		Rendering_present();
 		Rendering_clear();
