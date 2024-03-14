@@ -191,17 +191,17 @@ void _Level_populate(Level *self, FILE *fp) {
 				Map_delinear(&self->map, i, &x, &y);
 				Tile_Lime_setPos(recent, x, y);
 
-				goto mapify;
+				goto mapify_onEmpty;
 			case LEVEL_TILE_SLIME:
 				recent = Ceramicist_newSlime(&cer);
 
 				Map_delinear(&self->map, i, &x, &y);
 				Tile_Slime_setPos(recent, x, y);
 
-				goto mapify;
+				goto mapify_onEmpty;
 			case LEVEL_TILE_ROCK:
 				recent = Ceramicist_newRock(&cer);
-				goto mapify;
+				goto mapify_onEmpty;
 			case LEVEL_TILE_UNSTABLEGROUND:
 				recent = Ceramicist_newUnstableGround(&cer);
 				//wait, does unstable ground need a pos?
@@ -214,6 +214,9 @@ void _Level_populate(Level *self, FILE *fp) {
 				Map_stackIndexLinear(&self->map, i, recent); //I mean, I could just set the foundations of tiles to NULL and not have to stack here.
 				i++;
 				break;
+			mapify_onEmpty:
+				Map_stackIndexLinear(&self->map, i, Ceramicist_getEmpty(&cer));
+				goto mapify;
 		};
 	}
 
