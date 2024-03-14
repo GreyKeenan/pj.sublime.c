@@ -17,20 +17,22 @@ typedef struct Tile_Slime {
 
 } Tile_Slime;
 
-Tile_Slime *Tile_Slime_newInitialize_positionless() {
+Tile_Slime *Tile_Slime_newInitialize_positionless(Mist *mist) {
 	Tile_Slime *self = malloc(sizeof(Tile_Slime));
 
-	Tile_Slime_initialize_positionless(self);
+	Tile_Slime_initialize_positionless(self, mist);
 
 	return self;
 }
-void Tile_Slime_initialize_positionless(Tile_Slime *self) {
+void Tile_Slime_initialize_positionless(Tile_Slime *self, Mist *mist) {
+
 	self->x = 0;
 	self->y = 0;
 
 	self->hasMoved = false;
 
 	Tile_initialize((Tile*)self
+		, mist
 		, TILE_BHV_PUSH_SLIME
 		, TILE_BHV_NOTHING
 		, TILE_BHV_NOTHING

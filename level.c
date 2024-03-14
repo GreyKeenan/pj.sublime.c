@@ -17,6 +17,7 @@
 
 #include "map.h"
 #include "pile.h"
+#include "spray.h"
 
 #include "ceramicist.h"
 #include "ceramicist_impl.h"
@@ -37,6 +38,8 @@ Level Level_init_path(const char *path) {
 	Level self = _Level_measure(fp);
 	rewind(fp);
 
+	self.spray = Spray_init();
+
 	_Level_populate(&self, fp);
 	
 	return self;
@@ -44,6 +47,7 @@ Level Level_init_path(const char *path) {
 void Level_destroy(Level *self) {
 	Map_destroy(&self->map);
 	Pile_destroy(&self->pile);
+	Spray_destroy(self->spray);
 }
 
 Level _Level_measure(FILE *fp) {

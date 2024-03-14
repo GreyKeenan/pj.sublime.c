@@ -3,9 +3,10 @@
 
 #include "tile_slime_forw.h"
 
+#include "mist_forw.h"
 
-Tile_Slime *Tile_Slime_newInitialize_positionless();
-void Tile_Slime_initialize_positionless(Tile_Slime *self);
+Tile_Slime *Tile_Slime_newInitialize_positionless(Mist *mist);
+void Tile_Slime_initialize_positionless(Tile_Slime *self, Mist *mist);
 
 //Tile_destroy
 

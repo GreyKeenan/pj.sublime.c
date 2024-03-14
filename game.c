@@ -11,6 +11,8 @@
 #include "level.h"
 #include "level_impl.h"
 
+#include "drawMap.h"
+
 unsigned char Game_main() {
 	
 	Level level = Level_init_path("assets/levels/debug.txt");
@@ -43,7 +45,11 @@ unsigned char Game_main() {
 			default:
 				printf("| ERR | Unrecognized keymap check return value. |\n");
 				exit(1);
-		}
+		};
+
+		DrawMap_go(&level.map);
+		Rendering_present();
+		Rendering_clear();
 	}
 
 	Input_Keymap_destroy(keymap);
